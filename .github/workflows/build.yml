@@ -1,0 +1,26 @@
+on: push
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        runner: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          cmake -B build
+
+          echo '## Debug' >> $GITHUB_STEP_SUMMARY
+          cmake --build build --config Debug
+          cmake --install build --config Debug --prefix install-debug
+          ./install-debug/fourier-benchmarking >> $GITHUB_STEP_SUMMARY
+
+          echo '# Release' >> $GITHUB_STEP_SUMMARY
+          cmake --build build --config Release
+          cmake --install build --config Release --prefix install-release
+          ./install-release/fourier-benchmarking >> $GITHUB_STEP_SUMMARY
