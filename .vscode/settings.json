@@ -95,5 +95,8 @@
     "numbers": "cpp",
     "span": "cpp",
     "csignal": "cpp"
+  },
+  "cmake.configureSettings": {
+    "CPM_SOURCE_CACHE": "~/.cache/CPM"
   }
 }

@@ -1,7 +1,6 @@
 ColumnLimit:           0
 DeriveLineEnding:      true
 FixNamespaceComments:  true
-Language:              Cpp
 Standard:              c++17
 SortIncludes:          true
 SortUsingDeclarations: true

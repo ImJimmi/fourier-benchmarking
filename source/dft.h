@@ -18,16 +18,14 @@
         const auto z = std::exp(frequencyScaler * frequencies[i]);
         const auto zReciprocal = 1.0f / z;
 
-        auto result = std::complex<float>{};
+        output[i] = std::complex<float>{};
         auto zFactor = z;
 
         for (auto& x : input)
         {
             zFactor *= zReciprocal;
-            result += x * zFactor;
+            output[i] += x * zFactor;
         }
-
-        output[i] = result;
     }
 
     return output;
