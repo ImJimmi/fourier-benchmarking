@@ -9,7 +9,7 @@ id<MTLCommandQueue> commandQueue = [device newCommandQueue];
 [[nodiscard]] static auto getShaderLib()
 {
     NSError* error = nullptr;
-    NSString* shaderPath = [[NSBundle mainBundle] pathForResource:@"MetalShader"
+    NSString* shaderPath = [[NSBundle mainBundle] pathForResource:@"metal-dft"
                                                            ofType:@"metallib"];
     id<MTLLibrary> library = [device newLibraryWithFile:shaderPath error:&error];
 

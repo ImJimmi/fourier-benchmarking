@@ -1,6 +1,7 @@
 #include "benchmarking.h"
 #include "dft.h"
 #include "fft.h"
+#include "hlsl-dft.h"
 #include "math.h"
 #include "metal-dft.h"
 
@@ -55,6 +56,23 @@ void testMetalDFT(int size)
 }
 #endif
 
+#if JUCE_WINDOWS
+void testHLSLDFT(int size)
+{
+    const auto sampleRate = 44100.0f;
+    const auto frequencies = logRange(20.0f, 20000.0f, size);
+    const auto input = randomComplexBuffer(size * 2);
+
+    const auto durationSeconds = 3.0;
+    const auto result = executeBenchmark(juce::RelativeTime::seconds(durationSeconds), [&] {
+                            const auto output = hlslDFT(frequencies, sampleRate, input);
+                        })
+                      / durationSeconds;
+
+    std::cout << "| " << size << " | " << result << " | " << frequencies[1] - frequencies[0] << "Hz |\n";
+}
+#endif
+
 int main()
 {
     std::cout << "### FFT\n\n";
@@ -69,7 +87,7 @@ int main()
     std::cout << "| Buffer size | Iterations/second | Frequency Spacing (@44.1kHz) |\n";
     std::cout << "|-------------|-------------------|------------------------------|\n";
 
-    for (auto i = 5; i < 12; i++)
+    for (auto i = 5; i < 14; i++)
         testDFT(1 << i);
 
 #if JUCE_MAC
@@ -80,6 +98,16 @@ int main()
 
     for (auto i = 5; i < 16; i++)
         testMetalDFT(1 << i);
+#endif
+
+#if JUCE_WINDOWS
+    std::cout << "\n";
+    std::cout << "### HLSL DFT\n\n";
+    std::cout << "| Buffer size | Iterations/second | Frequency Spacing (@44.1kHz) |\n";
+    std::cout << "|-------------|-------------------|------------------------------|\n";
+
+    for (auto i = 5; i < 16; i++)
+        testHLSLDFT(1 << i);
 #endif
 
     // const auto size = 1 << 5;
